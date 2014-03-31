@@ -69,9 +69,7 @@ void Compile_C::run (IR::PHP_script* in, Pass_manager* pm)
 	new_arg (args) << "-I" << php_path << "/include/php/Zend";
 	new_arg (args) << "-L" << php_path << "/lib";
 	new_arg (args) << "-Wl,-R" << php_path << "/lib";
-	new_arg (args) << "-lphp5";
 	new_arg (args) << "-xc";
-	new_arg (args) << "-";
 
 	// Add (gcc) -g and -o arguments
 	if (strncmp (pm->args_info->optimize_arg, "0", 2) == 0)
@@ -98,6 +96,11 @@ void Compile_C::run (IR::PHP_script* in, Pass_manager* pm)
 		new_arg (args) << "-o" << pm->args_info->output_arg;
 	}
 
+        // Add file from stdin pipe
+	new_arg (args) << "-";
+
+	// Add php library at the end
+	new_arg (args) << "-lphp5";
 
 	// copy it into argument list
 	char** argv;
